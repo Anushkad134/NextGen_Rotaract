@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 NextGen Rotaract: Empowering Community & Leadership
 Project Overview
 NextGen Rotaract is a modern, dynamic web platform designed to empower Rotaract clubs by streamlining operations, enhancing member engagement, and showcasing impactful community initiatives. Built with a focus on user experience and robust functionality, this website serves as a central hub for club activities, member management, and public outreach.
@@ -145,3 +146,7 @@ Integration with other APIs (e.g., event calendars, social media feeds).
 
 License
 This project is open-sourced under the MIT License.
+=======
+# NextGen_Rotaract
+NextGen Rotaract: A modern web platform designed to empower Rotaract clubs. Features secure member authentication, streamlined communication, and dynamic content to foster leadership and community service.
+>>>>>>> 71838bf38d7ac2b27458cad2e4e7d351873e63e7
