@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events - Nextgen Rotaract</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            text-decoration: none;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: #3b82f6;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #3b82f6;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3b82f6;
+        }
+
+        .login-btn {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-btn:hover {
+            background: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 120px;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(30px);
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #3b82f6 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Events Container */
+        .events-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Filter Controls */
+        .filter-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Events Timeline */
+        .events-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, #3b82f6, rgba(59, 130, 246, 0.3));
+            transform: translateX(-50%);
+        }
+
+        .event-item {
+            display: flex;
+            margin-bottom: 4rem;
+            position: relative;
+            align-items: center;
+        }
+
+        .event-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .event-content {
+            flex: 1;
+            max-width: 45%;
+            margin: 0 2rem;
+        }
+
+        .event-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .event-card:hover::before {
+            left: 100%;
+        }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.1);
+        }
+
+        .event-date {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 120px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .event-day {
+            font-size: 2rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .event-month {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .event-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .event-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .event-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .event-tags {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .event-tag {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .rsvp-btn {
+            background: linear-gradient(135deg, #3b82f6, #1e40af);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .rsvp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+        }
+
+        .learn-more-btn {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .learn-more-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Upcoming Events Section */
+        .upcoming-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .upcoming-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #ffffff;
+        }
+
+        .upcoming-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .upcoming-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
+        }
+
+        .upcoming-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .timeline-line {
+                left: 2rem;
+            }
+
+            .event-item,
+            .event-item:nth-child(even) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .event-content {
+                max-width: 100%;
+                margin-left: 4rem;
+            }
+
+            .event-date {
+                left: 2rem;
+                transform: none;
+            }
+
+            .filter-controls {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-cog"></i>
+                Nextgen Rotaract
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="events.html" class="active">Events</a></li>
+                <li><a href="initiatives.html">Initiatives</a></li>
+                <li><a href="media.html">Media</a></li>
+                <li><a href="members.html">Members</a></li>
+                
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+           <button class="login-btn" onclick="window.location.href='login_signup.html'">Login / Register</button>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Events</h1>
+            <p class="page-subtitle">Discover our flagship events, community initiatives, and opportunities to make a difference in Ahmedabad, Gujarat</p>
+        </section>
+
+        <!-- Events Container -->
+        <div class="events-container">
+            <!-- Filter Controls -->
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All Events</button>
+                <button class="filter-btn" data-filter="upcoming">Upcoming</button>
+                <button class="filter-btn" data-filter="past">Past Events</button>
+                <button class="filter-btn" data-filter="social">Social</button>
+                <button class="filter-btn" data-filter="technical">Technical</button>
+                <button class="filter-btn" data-filter="cultural">Cultural</button>
+                <button class="filter-btn" data-filter="community">Community Service</button>
+            </div>
+
+            <!-- Events Timeline -->
+            <div class="events-timeline">
+                <div class="timeline-line"></div>
+
+                <!-- Event 1 -->
+                <div class="event-item" data-category="upcoming social">
+                    <div class="event-date">
+                        <span class="event-day">15</span>
+                        <span class="event-month">AUG 2025</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-card">
+                            <h3 class="event-title">Leadership Summit 2025</h3>
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>LDRP-ITR Campus, Gandhinagar, Gujarat</span>
+                            </div>
+                            <p class="event-description">Join us for an inspiring day of leadership development, networking, and community building. Featuring keynote speakers, interactive workshops, and collaborative sessions.</p>
+                            <div class="event-tags">
+                                <span class="event-tag">Leadership</span>
+                                <span class="event-tag">Networking</span>
+                                <span class="event-tag">Workshop</span>
+                            </div>
+                            <div class="event-actions">
+                                <a href="#rsvp" class="rsvp-btn">RSVP Now</a>
+                                <a href="#details" class="learn-more-btn">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="event-item" data-category="upcoming community">
+                    <div class="event-date">
+                        <span class="event-day">22</span>
+                        <span class="event-month">AUG 2025</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-card">
+                            <h3 class="event-title">Clean Sabarmati Initiative</h3>
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Sabarmati Riverfront, Ahmedabad, Gujarat</span>
+                            </div>
+                            <p class="event-description">A community-driven environmental initiative to clean and preserve the iconic Sabarmati Riverfront. Join hands with fellow Rotaractors for a cleaner Gujarat.</p>
+                            <div class="event-tags">
+                                <span class="event-tag">Environment</span>
+                                <span class="event-tag">Community Service</span>
+                                <span class="event-tag">Sustainability</span>
+                            </div>
+                            <div class="event-actions">
+                                <a href="#rsvp" class="rsvp-btn">Join Us</a>
+                                <a href="#details" class="learn-more-btn">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="event-item" data-category="upcoming technical">
+                    <div class="event-date">
+                        <span class="event-day">05</span>
+                        <span class="event-month">SEP 2025</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-card">
+                            <h3 class="event-title">TechConnect Gujarat 2025</h3>
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Gujarat Technological University, Ahmedabad</span>
+                            </div>
+                            <p class="event-description">A premier technology conference bringing together students, professionals, and innovators across Gujarat. Featuring AI, blockchain, and emerging tech sessions.</p>
+                            <div class="event-tags">
+                                <span class="event-tag">Technology</span>
+                                <span class="event-tag">Innovation</span>
+                                <span class="event-tag">Conference</span>
+                            </div>
+                            <div class="event-actions">
+                                <a href="#rsvp" class="rsvp-btn">Register</a>
+                                <a href="#details" class="learn-more-btn">View Agenda</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 4 -->
+                <div class="event-item" data-category="past cultural">
+                    <div class="event-date">
+                        <span class="event-day">10</span>
+                        <span class="event-month">JUL 2025</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-card">
+                            <h3 class="event-title">Gujarat Cultural Festival</h3>
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Sardar Patel Stadium, Ahmedabad, Gujarat</span>
+                            </div>
+                            <p class="event-description">A vibrant celebration of Gujarat's rich cultural heritage featuring traditional dance, music, and local artisans. Successfully hosted with 500+ participants.</p>
+                            <div class="event-tags">
+                                <span class="event-tag">Culture</span>
+                                <span class="event-tag">Heritage</span>
+                                <span class="event-tag">Community</span>
+                            </div>
+                            <div class="event-actions">
+                                <a href="#gallery" class="learn-more-btn">View Gallery</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 5 -->
+                <div class="event-item" data-category="past social">
+                    <div class="event-date">
+                        <span class="event-day">25</span>
+                        <span class="event-month">JUN 2025</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-card">
+                            <h3 class="event-title">Youth Empowerment Workshop</h3>
+                            <div class="event-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>AMA Computer Academy, Ahmedabad, Gujarat</span>
+                            </div>
+                            <p class="event-description">An intensive workshop focused on skill development, career guidance, and personal development for the youth of Gujarat. Featured industry experts and interactive sessions.</p>
+                            <div class="event-tags">
+                                <span class="event-tag">Youth Development</span>
+                                <span class="event-tag">Skills</span>
+                                <span class="event-tag">Career</span>
+                            </div>
+                            <div class="event-actions">
+                                <a href="#feedback" class="learn-more-btn">View Feedback</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events Grid -->
+        <section class="upcoming-section">
+            <h2 class="upcoming-title">Quick Preview - Upcoming Events</h2>
+            <div class="upcoming-grid">
+                <div class="upcoming-card">
+                    <h3 class="event-title">Digital Literacy Drive</h3>
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rural Gujarat Villages</span>
+                    </div>
+                    <p class="event-description">Empowering rural communities with digital skills and internet literacy.</p>
+                    <div class="event-tags">
+                        <span class="event-tag">Education</span>
+                        <span class="event-tag">Digital</span>
+                    </div>
+                </div>
+
+                <div class="upcoming-card">
+                    <h3 class="event-title">Startup Showcase Gujarat</h3>
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>iCreate Incubator, Ahmedabad</span>
+                    </div>
+                    <p class="event-description">Platform for emerging startups to showcase their innovations and connect with investors.</p>
+                    <div class="event-tags">
+                        <span class="event-tag">Startups</span>
+                        <span class="event-tag">Innovation</span>
+                    </div>
+                </div>
+
+                <div class="upcoming-card">
+                    <h3 class="event-title">Health & Wellness Camp</h3>
+                    <div class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Community Centers, Ahmedabad</span>
+                    </div>
+                    <p class="event-description">Free health checkups and wellness awareness programs for underprivileged communities.</p>
+                    <div class="event-tags">
+                        <span class="event-tag">Healthcare</span>
+                        <span class="event-tag">Community</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const eventItems = document.querySelectorAll('.event-item');
+
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+
+                    const filterValue = this.getAttribute('data-filter');
+
+                    eventItems.forEach(item => {
+                        if (filterValue === 'all') {
+                            item.style.display = 'flex';
+                        } else {
+                            const categories = item.getAttribute('data-category');
+                            if (categories && categories.includes(filterValue)) {
+                                item.style.display = 'flex';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        }
+                    });
+                });
+            });
+
+            // Add smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add intersection observer for timeline animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // Initially hide items for animation
+            eventItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(50px)';
+                item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(item);
+            });
+        });
+    </script>
+    <script src="js/utils.js"></script>
+    <script src="js/modals.js"></script>
+
+</body>
+</html>

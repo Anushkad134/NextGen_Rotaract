@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Gallery - Nextgen Rotaract</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .logo::before {
+            content: "⚙";
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+            color: #4a9eff;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #4a9eff;
+        }
+
+        .nav-links a.active {
+            color: #4a9eff;
+        }
+
+        .login-btn {
+            background: rgba(74, 158, 255, 0.2);
+            border: 1px solid rgba(74, 158, 255, 0.3);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: rgba(74, 158, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .media-container {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .media-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .media-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #4a9eff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .media-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filter Buttons */
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: rgba(74, 158, 255, 0.3);
+            border-color: rgba(74, 158, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Media Grid */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .media-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .media-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(74, 158, 255, 0.2);
+            border-color: rgba(74, 158, 255, 0.3);
+        }
+
+        .media-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .media-item:hover .media-image {
+            transform: scale(1.05);
+        }
+
+        .media-content {
+            padding: 1.5rem;
+        }
+
+        .media-category {
+            display: inline-block;
+            background: rgba(74, 158, 255, 0.2);
+            color: #4a9eff;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+        }
+
+        .media-title-card {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #ffffff;
+        }
+
+        .media-description {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            backdrop-filter: blur(20px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .lightbox-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #ffffff;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .media-container {
+                padding: 1rem;
+            }
+
+            .media-title {
+                font-size: 2rem;
+            }
+
+            .media-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .filter-container {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .media-item {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .media-item:nth-child(1) { animation-delay: 0.1s; }
+        .media-item:nth-child(2) { animation-delay: 0.2s; }
+        .media-item:nth-child(3) { animation-delay: 0.3s; }
+        .media-item:nth-child(4) { animation-delay: 0.4s; }
+        .media-item:nth-child(5) { animation-delay: 0.5s; }
+        .media-item:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Nextgen Rotaract</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="initiatives.html">Initiatives</a></li>
+                <li><a href="media.html" class="active">Media</a></li>
+                <li><a href="members.html">Members</a></li>
+                
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <button class="login-btn" onclick="window.location.href='login_signup.html'">Login / Register</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="media-container">
+        <!-- Header -->
+        <div class="media-header">
+            <h1 class="media-title">Media Gallery</h1>
+            <p class="media-subtitle">Capturing moments of impact, leadership, and community service that define our journey</p>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All Media</button>
+            <button class="filter-btn" data-filter="events">Events</button>
+            <button class="filter-btn" data-filter="initiatives">Initiatives</button>
+            <button class="filter-btn" data-filter="posters">Posters</button>
+            <button class="filter-btn" data-filter="community">Community Service</button>
+        </div>
+
+        <!-- Media Grid -->
+        <div class="media-grid" id="mediaGrid">
+            <!-- SantaSwap Event -->
+            <div class="media-item" data-category="events">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InNhbnRhc3dhcCIgeDI9IjEiIHkyPSIxIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJkNTAzNiIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM0YTc2NTAiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0idXJsKCNzYW50YXN3YXApIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSI+U2FudGFTd2FwIDIuMDwvdGV4dD4KPHRleHQgeD0iMjAwIiB5PSIxNDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjgpIj5ab25hbCBNZWV0IDguMDwvdGV4dD4KPHN2ZyB4PSIxNzAiIHk9IjYwIiB3aWR0aD0iNjAiIGhlaWdodD0iNDAiPgo8Y2lyY2xlIGN4PSIzMCIgY3k9IjIwIiByPSIxNSIgZmlsbD0iIzRhOWVmZiIgZmlsbC1vcGFjaXR5PSIwLjMiLz4KPGNpcmNsZSBjeD0iMjAiIGN5PSIxNSIgcj0iOCIgZmlsbD0iIzRhOWVmZiIgZmlsbC1vcGFjaXR5PSIwLjUiLz4KPGNpcmNsZSBjeD0iNDAiIGN5PSIyNSIgcj0iNiIgZmlsbD0iIzRhOWVmZiIgZmlsbC1vcGFjaXR5PSIwLjciLz4KPC9zdmc+CjxzdmcgeD0iMTYwIiB5PSIxNjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSI2MCI+CjxyZWN0IHg9IjEwIiB5PSIyMCIgd2lkdGg9IjE1IiBoZWlnaHQ9IjMwIiBmaWxsPSIjNGE5ZWZmIiBmaWxsLW9wYWNpdHk9IjAuNCIgcng9IjIiLz4KPHJlY3QgeD0iMzAiIHk9IjE1IiB3aWR0aD0iMTUiIGhlaWdodD0iMzUiIGZpbGw9IiM0YTllZmYiIGZpbGwtb3BhY2l0eT0iMC42IiByeD0iMiIvPgo8cmVjdCB4PSI1MCIgeT0iMjUiIHdpZHRoPSIxNSIgaGVpZ2h0PSIyNSIgZmlsbD0iIzRhOWVmZiIgZmlsbC1vcGFjaXR5PSIwLjUiIHJ4PSIyIi8+Cjwvc3ZnPgo8L3N2Zz4=" alt="SantaSwap 2.0 Event" class="media-image">
+                <div class="media-content">
+                    <span class="media-category">Events</span>
+                    <h3 class="media-title-card">SantaSwap 2.0</h3>
+                    <p class="media-description">Zonal Meet 8.0 - A spectacular gathering bringing together Rotaract clubs for networking, collaboration, and festive celebration.</p>
+                </div>
+            </div>
+
+            <!-- Udaan Awards -->
+            <div class="media-item" data-category="events">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InVkYWFuIiB4Mj0iMSIgeTI9IjEiPgo8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjZmZkNzAwIi8+CjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmYTUwMCIvPgo8L2xpbmVhckdyYWRpZW50Pgo8L2RlZnM+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMjUwIiBmaWxsPSJ1cmwoI3VkYWFuKSIvPgo8dGV4dCB4PSIyMDAiIHk9IjExMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzMzMzMzMyI+VWRhYW48L3RleHQ+Cjx0ZXh0IHg9IjIwMCIgeT0iMTQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9InJnYmEoNTEsNTEsNTEsMC44KSI+Q2x1YiBJbnN0YWxsYXRpb24gQ2VyZW1vbnk8L3RleHQ+CjxzdmcgeD0iMTcwIiB5PSI2MCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjQwIj4KPHN0YXIgcG9pbnRzPSIzMCw1IDM3LDE5IDUyLDE5IDQwLDMwIDQ1LDQ1IDMwLDM1IDE1LDQ1IDIwLDMwIDgsMTkgMjMsMTkiIGZpbGw9IiNmZmY3MDAiIGZpbGwtb3BhY2l0eT0iMC44Ii8+CjxzdGFyIHBvaW50cz0iMTUsNSAyMiwxOSAzNywxOSAyNSwzMCAzMCw0NSAxNSwzNSAwLDQ1IDUsMzAgLTcsMTkgOCwxOSIgZmlsbD0iI2ZmZjcwMCIgZmlsbC1vcGFjaXR5PSIwLjYiLz4KPHN0YXIgcG9pbnRzPSI0NSw1IDUyLDE5IDY3LDE5IDU1LDMwIDYwLDQ1IDQ1LDM1IDMwLDQ1IDM1LDMwIDIzLDE5IDM4LDE5IiBmaWxsPSIjZmZmNzAwIiBmaWxsLW9wYWNpdHk9IjAuNyIvPgo8L3N2Zz4KPC9zdmc+" alt="Udaan Awards Ceremony" class="media-image">
+                <div class="media-content">
+                    <span class="media-category">Events</span>
+                    <h3 class="media-title-card">Udaan</h3>
+                    <p class="media-description">Club Installation Ceremony - Celebrating achievements and recognizing outstanding contributions to community service and leadership.</p>
+                </div>
+            </div>
+
+            <!-- International Yoga Day -->
+            <div class="media-item" data-category="initiatives">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9InlvZ2EiIHgyPSIxIiB5Mj0iMSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM4N0NFRUIiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjNjNBNEZGIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyNTAiIGZpbGw9InVybCgjeW9nYSkiLz4KPHRleHQgeD0iMjAwIiB5PSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiPkludGVybmF0aW9uYWw8L3RleHQ+Cjx0ZXh0IHg9IjIwMCIgeT0iMTIwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSI+WU9HQSBEQVk8L3RleHQ+Cjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC44KSI+WWVhciBpcyBhIHdheSB0byBmcmVlZG9tPC90ZXh0Pgo8c3ZnIHg9IjE4MCIgeT0iNDAiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxjaXJjbGUgY3g9IjIwIiBjeT0iMTAiIHI9IjgiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuOCIvPgo8cGF0aCBkPSJNMTAgMjUgUTIwIDMwIDMwIDI1IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiIGZpbGw9Im5vbmUiIHN0cm9rZS1vcGFjaXR5PSIwLjgiLz4KPHA1dGggZD0iTTE1IDIwIEwyNSAyMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2Utb3BhY2l0eT0iMC44Ii8+CjwvcGVhdGggZD0iTTEwIDMwIEwxNSAzNSBMMjUgMzUgTDMwIDMwIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiIHN0cm9rZS1vcGFjaXR5PSIwLjgiLz4KPC9zdmc+Cjwvc3ZnPg==" alt="International Yoga Day Initiative" class="media-image">
+                <div class="media-content">
+                    <span class="media-category">Initiatives</span>
+                    <h3 class="media-title-card">International Yoga Day</h3>
+                    <p class="media-description">Community wellness initiative promoting mental and physical health through yoga practices. "Yoga is a way to freedom."</p>
+                </div>
+            </div>
+
+            <!-- Educational Initiative -->
+            <div class="media-item" data-category="community">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9ImVkdWNhdGlvbiIgeDI9IjEiIHkyPSIxIj4KPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzJkNzY1MyIvPgo8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM0NTk5NmYiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgZmlsbD0idXJsKCNlZHVjYXRpb24pIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSJ3aGl0ZSI+RWR1Y2F0aW9uIEZvciBBbGw8L3RleHQ+Cjx0ZXh0IHg9IjIwMCIgeT0iMTQwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC44KSI+Q29tbXVuaXR5IFRlYWNoaW5nIEluaXRpYXRpdmU8L3RleHQ+CjxyZWN0IHg9IjE2MCIgeT0iNjAiIHdpZHRoPSI4MCIgaGVpZ2h0PSIzMCIgZmlsbD0iI2ZmZmZmZiIgZmlsbC1vcGFjaXR5PSIwLjIiIHJ4PSI1Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iODAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0id2hpdGUiPkJsYWNrYm9hcmQ8L3RleHQ+CjxjaXJjbGUgY3g9IjE4MCIgY3k9IjE3MCIgcj0iMTAiIGZpbGw9IiM0YTllZmYiIGZpbGwtb3BhY2l0eT0iMC42Ii8+CjxjaXJjbGUgY3g9IjIwMCIgY3k9IjE3NSIgcj0iOCIgZmlsbD0iIzRhOWVmZiIgZmlsbC1vcGFjaXR5PSIwLjUiLz4KPGNpcmNsZSBjeD0iMjIwIiBjeT0iMTcwIiByPSI5IiBmaWxsPSIjNGE5ZWZmIiBmaWxsLW9wYWNpdHk9IjAuNyIvPgo8L3N2Zz4=" alt="Education For All Initiative" class="media-image">
+                <div class="media-content">
+                    <span class="media-category">Community Service</span>
+                    <h3 class="media-title-card">Education For All</h3>
+                    <p class="media-description">Community teaching initiative providing quality education to underprivileged children, fostering learning and development in local communities.</p>
+                </div>
+            </div>
+
+            <!-- Rotaract Logo -->
+            <div class="media-item" data-category="posters">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8cmFkaWFsR3JhZGllbnQgaWQ9ImxvZ29CZyI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM0YTllZmYiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMWU0MDhmIi8+CjwvcmFkaWFsR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyNTAiIGZpbGw9InVybCgjbG9nb0JnKSIvPgo8Y2lyY2xlIGN4PSIyMDAiIGN5PSIxMjUiIHI9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1vcGFjaXR5PSIwLjgiLz4KPGNpcmNsZSBjeD0iMjAwIiBjeT0iMTI1IiByPSI0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2Utb3BhY2l0eT0iMC42Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iNjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxOCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIj5ST1RBUkFDVCBOTEpFVDwvdGV4dD4KPHRleHQgeD0iMjAwIiB5PSIyMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjgpIj5DT0xMQUIgwrEgTEVBRCDCsSBJTlNQSVJFPC90ZXh0Pgo8cGF0aCBkPSJNMTcwIDEyNSBMMjMwIDEyNSBNMjAwIDk1IEwyMDAgMTU1IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMiIHN0cm9rZS1vcGFjaXR5PSIwLjciLz4KPC9zdmc+" alt="Rotaract NLJET Logo" class="media-image">
+                <div class="media-content">
+                    <span class="media-category">Posters</span>
+                    <h3 class="media-title-card">Rotaract NLJET</h3>
+                    <p class="media-description">Official club logo representing our mission: "Collab • Lead • Inspire" - Building connections and leadership in the community.</p>
+                </div>
+            </div>
+
+            <!-- Mahadan Blood Donation -->
+            <div class="media-item" data-category="initiatives">
+                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjI1MCIgdmlld0JveD0iMCAwIDQwMCAyNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxkZWZzPgo8bGluZWFyR3JhZGllbnQgaWQ9Im1haGFkYW4iIHgyPSIxIiB5Mj0iMSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNkYzI2MjYiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjYjkxYzFjIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSIyNTAiIGZpbGw9InVybCgjbWFoYWRhbikiLz4KPHR5eHQgeD0iMjAwIiB5PSI5MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI4IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiPk1BSEFEQU4gOC4wPC90ZXh0Pgo8dGV4dCB4PSIyMDAiIHk9IjEyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuOSkiPkludGVybmF0aW9uYWwgQmxvb2QgRG9uYXRpb24gQ2FtcDwvdGV4dD4KPHR5eHQgeD0iMjAwIiB5PSIxNjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IndoaXRlIj5Gcm9tIE9ORSB0byBNQU5ZPC90ZXh0Pgo8Y2lyY2xlIGN4PSIxNzAiIGN5PSI2MCIgcj0iMTIiIGZpbGw9IndoaXRlIiBmaWxsLW9wYWNpdHk9IjAuMyIvPgo8Y2lyY2xlIGN4PSIyMDAiIGN5PSI1MCIgcj0iOCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC41Ii8+CjxjaXJjbGUgY3g9IjIzMCIgY3k9IjY1IiByPSIxMCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC40Ii8+CjxwYXRoIGQ9Ik0yMDAgMTkwIEMyMDAgMTgwIDIxMCAxNzAgMjIwIDE4MCBDMJQMDE5MCAyMjAgMjAwIDIxMCAyMDAgQzE5MCAyMDAgMTgwIDE5MCAzOTUgMTgwIEMxOTAgMTcwIDIwMCAxODAgMjAwIDE5MCIgZmlsbD0id2hpdGUiIGZpbGwtb3BhY2l0eT0iMC43Ii8+Cjwvc3ZnPg==" alt="Mahadan 8.0 Blood Donation Camp" class="media-image">
+                <div class="media-content">
+                    <span class="media-category">Initiatives</span>
+                    <h3 class="media-title-card">Mahadan 8.0</h3>
+                    <p class="media-description">International Blood Donation Camp - "From One to Many" - Saving lives through voluntary blood donation across multiple venues in Ahmedabad.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-image" id="lightboxImage">
+        </div>
+    </div>
+
+    <script>
+        // Filter functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const mediaItems = document.querySelectorAll('.media-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                mediaItems.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                        item.style.animation = 'fadeInUp 0.6s ease forwards';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Lightbox functionality
+        const mediaImages = document.querySelectorAll('.media-image');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImage = document.getElementById('lightboxImage');
+
+        mediaImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImage.src = img.src;
+                lightboxImage.alt = img.alt;
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox when clicking outside the image
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Close lightbox with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add stagger animation delay on page load
+        window.addEventListener('load', () => {
+            mediaItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+    <script src="js/utils.js"></script>
+    <script src="js/modals.js"></script>
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initiatives | Nextgen Rotaract</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #000000;
+            --primary-white: #ffffff;
+            --deep-charcoal: #1a1a1a;
+            --metallic-grey: #2a2a2a;
+            --royal-sapphire: #2563eb;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: var(--primary-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: 'Sora', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--primary-white);
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--royal-sapphire);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--primary-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--royal-sapphire);
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--royal-sapphire);
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            color: var(--primary-white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: var(--royal-sapphire);
+            transform: translateY(-2px);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+        }
+
+        .page-title {
+            font-family: 'Sora', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary-white) 0%, var(--royal-sapphire) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Initiatives Grid */
+        .initiatives-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .initiatives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .initiative-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .initiative-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--royal-sapphire) 0%, #3b82f6 100%);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .initiative-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--royal-sapphire);
+        }
+
+        .initiative-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .initiative-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .initiative-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--royal-sapphire);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .initiative-info h3 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-white);
+        }
+
+        .initiative-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(37, 99, 235, 0.2);
+            border: 1px solid var(--royal-sapphire);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--royal-sapphire);
+        }
+
+        .initiative-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .initiative-details {
+            display: none;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .initiative-details.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .initiative-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .metric {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .metric-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--royal-sapphire);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.25rem;
+        }
+
+        .initiative-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .read-more-btn {
+            background: rgba(37, 99, 235, 0.2);
+            border: 1px solid var(--royal-sapphire);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            color: var(--royal-sapphire);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .read-more-btn:hover {
+            background: var(--royal-sapphire);
+            color: var(--primary-white);
+            transform: translateY(-2px);
+        }
+
+        .location-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .initiatives-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .initiative-card {
+                padding: 1.5rem;
+            }
+
+            .initiative-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .page-header {
+                padding: 4rem 1rem 3rem;
+            }
+
+            .initiatives-container {
+                padding: 0 1rem 4rem;
+            }
+
+            .initiative-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">⚙</div>
+                Nextgen Rotaract
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="initiatives.html" class="active">Initiatives</a></li>
+                <li><a href="media.html">Media</a></li>
+                <li><a href="members.html">Members</a></li>
+                
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <button class="login-btn" onclick="window.location.href='login_signup.html'">Login / Register</button>
+        </nav>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1 class="page-title">Our Initiatives</h1>
+        <p class="page-subtitle">Driving positive change in Ahmedabad and beyond through impactful community initiatives and sustainable development projects</p>
+    </section>
+
+    <!-- Initiatives Container -->
+    <main class="initiatives-container">
+        <div class="initiatives-grid">
+            <!-- Education Initiative -->
+            <div class="initiative-card">
+                <div class="initiative-header">
+                    <div class="initiative-icon">📚</div>
+                    <div class="initiative-info">
+                        <h3>Shiksha Sankalp</h3>
+                        <div class="initiative-tags">
+                            <span class="tag">Education</span>
+                            <span class="tag">Community</span>
+                            <span class="tag">Ongoing</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="initiative-description">
+                    Empowering underprivileged children in Ahmedabad through quality education, digital literacy programs, and scholarship opportunities.
+                </p>
+                <div class="initiative-details">
+                    <p>Our flagship education initiative focuses on bridging the educational gap in rural and urban slums around Ahmedabad. We provide free tutoring, distribute educational materials, and run computer literacy programs for children aged 6-16. The program has established learning centers in Maninagar, Naroda, and Vatva areas.</p>
+                    <p><strong>Key Activities:</strong> After-school tutoring, digital skills training, scholarship distribution, educational material supply, parent awareness sessions.</p>
+                </div>
+                <div class="initiative-metrics">
+                    <div class="metric">
+                        <span class="metric-value">500+</span>
+                        <span class="metric-label">Students Reached</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">8</span>
+                        <span class="metric-label">Learning Centers</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">₹2.5L</span>
+                        <span class="metric-label">Scholarships</span>
+                    </div>
+                </div>
+                <div class="initiative-actions">
+                    <button class="read-more-btn" onclick="toggleDetails(this)">Read More</button>
+                    <div class="location-tag">
+                        <span>📍</span>
+                        Ahmedabad, Gujarat
+                    </div>
+                </div>
+            </div>
+
+            <!-- Health Initiative -->
+            <div class="initiative-card">
+                <div class="initiative-header">
+                    <div class="initiative-icon">🏥</div>
+                    <div class="initiative-info">
+                        <h3>Swasthya Seva</h3>
+                        <div class="initiative-tags">
+                            <span class="tag">Healthcare</span>
+                            <span class="tag">Medical Camps</span>
+                            <span class="tag">Active</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="initiative-description">
+                    Providing accessible healthcare services through medical camps, health awareness programs, and preventive care initiatives across Gujarat.
+                </p>
+                <div class="initiative-details">
+                    <p>Swasthya Seva conducts regular health checkup camps in rural areas around Ahmedabad, focusing on preventive healthcare and early disease detection. Our team of volunteer doctors and medical students provides free consultations, basic treatments, and health education.</p>
+                    <p><strong>Services Offered:</strong> General health checkups, blood pressure monitoring, diabetes screening, eye checkups, dental care, health awareness sessions, medicine distribution.</p>
+                </div>
+                <div class="initiative-metrics">
+                    <div class="metric">
+                        <span class="metric-value">1200+</span>
+                        <span class="metric-label">Patients Served</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">24</span>
+                        <span class="metric-label">Medical Camps</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">15</span>
+                        <span class="metric-label">Villages Covered</span>
+                    </div>
+                </div>
+                <div class="initiative-actions">
+                    <button class="read-more-btn" onclick="toggleDetails(this)">Read More</button>
+                    <div class="location-tag">
+                        <span>📍</span>
+                        Rural Gujarat
+                    </div>
+                </div>
+            </div>
+
+            <!-- Environment Initiative -->
+            <div class="initiative-card">
+                <div class="initiative-header">
+                    <div class="initiative-icon">🌱</div>
+                    <div class="initiative-info">
+                        <h3>Hara Bhara Gujarat</h3>
+                        <div class="initiative-tags">
+                            <span class="tag">Environment</span>
+                            <span class="tag">Sustainability</span>
+                            <span class="tag">Green</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="initiative-description">
+                    Promoting environmental consciousness through tree plantation drives, waste management programs, and renewable energy awareness in Ahmedabad.
+                </p>
+                <div class="initiative-details">
+                    <p>Our environmental initiative focuses on creating a sustainable future for Ahmedabad through various green activities. We organize monthly tree plantation drives, conduct waste segregation awareness programs, and promote renewable energy adoption in local communities.</p>
+                    <p><strong>Activities Include:</strong> Tree plantation drives, plastic-free campaigns, solar energy workshops, waste segregation training, water conservation projects, air quality monitoring.</p>
+                </div>
+                <div class="initiative-metrics">
+                    <div class="metric">
+                        <span class="metric-value">5000+</span>
+                        <span class="metric-label">Trees Planted</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">50</span>
+                        <span class="metric-label">Communities</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">80%</span>
+                        <span class="metric-label">Survival Rate</span>
+                    </div>
+                </div>
+                <div class="initiative-actions">
+                    <button class="read-more-btn" onclick="toggleDetails(this)">Read More</button>
+                    <div class="location-tag">
+                        <span>📍</span>
+                        Ahmedabad Metro
+                    </div>
+                </div>
+            </div>
+
+            <!-- Women Empowerment Initiative -->
+            <div class="initiative-card">
+                <div class="initiative-header">
+                    <div class="initiative-icon">👩‍💼</div>
+                    <div class="initiative-info">
+                        <h3>Shakti Stree</h3>
+                        <div class="initiative-tags">
+                            <span class="tag">Women</span>
+                            <span class="tag">Empowerment</span>
+                            <span class="tag">Skills</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="initiative-description">
+                    Empowering women through skill development programs, financial literacy workshops, and entrepreneurship support in Gujarat's urban and rural areas.
+                </p>
+                <div class="initiative-details">
+                    <p>Shakti Stree focuses on women's economic empowerment through comprehensive skill development and entrepreneurship programs. We provide training in various trades, financial literacy education, and support for starting small businesses.</p>
+                    <p><strong>Program Features:</strong> Tailoring and embroidery training, digital literacy for women, microfinance guidance, business plan development, marketing support for women entrepreneurs.</p>
+                </div>
+                <div class="initiative-metrics">
+                    <div class="metric">
+                        <span class="metric-value">300+</span>
+                        <span class="metric-label">Women Trained</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">45</span>
+                        <span class="metric-label">Businesses Started</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">85%</span>
+                        <span class="metric-label">Success Rate</span>
+                    </div>
+                </div>
+                <div class="initiative-actions">
+                    <button class="read-more-btn" onclick="toggleDetails(this)">Read More</button>
+                    <div class="location-tag">
+                        <span>📍</span>
+                        Ahmedabad & Districts
+                    </div>
+                </div>
+            </div>
+
+            <!-- Digital Literacy Initiative -->
+            <div class="initiative-card">
+                <div class="initiative-header">
+                    <div class="initiative-icon">💻</div>
+                    <div class="initiative-info">
+                        <h3>Digital Suraksha</h3>
+                        <div class="initiative-tags">
+                            <span class="tag">Technology</span>
+                            <span class="tag">Digital</span>
+                            <span class="tag">Safety</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="initiative-description">
+                    Building digital literacy and cybersecurity awareness among senior citizens and rural communities in and around Ahmedabad.
+                </p>
+                <div class="initiative-details">
+                    <p>Digital Suraksha addresses the growing need for digital literacy in our rapidly digitalizing society. We focus on teaching basic computer skills, smartphone usage, online safety, and digital payment methods to bridge the digital divide.</p>
+                    <p><strong>Training Modules:</strong> Basic computer operations, internet safety, digital payments (UPI, banking), smartphone usage, social media awareness, cyber fraud prevention.</p>
+                </div>
+                <div class="initiative-metrics">
+                    <div class="metric">
+                        <span class="metric-value">800+</span>
+                        <span class="metric-label">People Trained</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">32</span>
+                        <span class="metric-label">Workshops</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">12</span>
+                        <span class="metric-label">Training Centers</span>
+                    </div>
+                </div>
+                <div class="initiative-actions">
+                    <button class="read-more-btn" onclick="toggleDetails(this)">Read More</button>
+                    <div class="location-tag">
+                        <span>📍</span>
+                        Gujarat State
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blood Donation Initiative -->
+            <div class="initiative-card">
+                <div class="initiative-header">
+                    <div class="initiative-icon">🩸</div>
+                    <div class="initiative-info">
+                        <h3>Jeewan Daan</h3>
+                        <div class="initiative-tags">
+                            <span class="tag">Healthcare</span>
+                            <span class="tag">Blood Donation</span>
+                            <span class="tag">Life Saving</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="initiative-description">
+                    Organizing regular blood donation camps and maintaining a donor database to ensure timely blood availability for emergency cases in Ahmedabad hospitals.
+                </p>
+                <div class="initiative-details">
+                    <p>Jeewan Daan operates as a bridge between blood donors and those in need. We organize monthly blood donation camps at colleges, offices, and community centers across Ahmedabad, maintaining a 24/7 helpline for emergency blood requirements.</p>
+                    <p><strong>Services:</strong> Regular blood donation camps, emergency blood donor coordination, blood type database management, donor health monitoring, awareness campaigns about voluntary blood donation.</p>
+                </div>
+                <div class="initiative-metrics">
+                    <div class="metric">
+                        <span class="metric-value">2500+</span>
+                        <span class="metric-label">Units Collected</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">900+</span>
+                        <span class="metric-label">Registered Donors</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-value">48</span>
+                        <span class="metric-label">Camps Organized</span>
+                    </div>
+                </div>
+                <div class="initiative-actions">
+                    <button class="read-more-btn" onclick="toggleDetails(this)">Read More</button>
+                    <div class="location-tag">
+                        <span>📍</span>
+                        Ahmedabad City
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function toggleDetails(button) {
+            const card = button.closest('.initiative-card');
+            const details = card.querySelector('.initiative-details');
+            
+            if (details.classList.contains('show')) {
+                details.classList.remove('show');
+                button.textContent = 'Read More';
+            } else {
+                // Close all other open details
+                document.querySelectorAll('.initiative-details.show').forEach(detail => {
+                    detail.classList.remove('show');
+                    detail.closest('.initiative-card').querySelector('.read-more-btn').textContent = 'Read More';
+                });
+                
+                details.classList.add('show');
+                button.textContent = 'Read Less';
+            }
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all initiative cards for scroll animations
+        document.querySelectorAll('.initiative-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `all 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+    </script>
+    <script src="js/utils.js"></script>
+    <script src="js/modals.js"></script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Members - Nextgen Rotaract</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header & Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 40px;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #4169E1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #4169E1;
+        }
+
+        .nav-links a.active {
+            color: #4169E1;
+        }
+
+        .nav-links a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #4169E1;
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: rgba(65, 105, 225, 0.2);
+            border-color: #4169E1;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 60px 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #4169E1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .page-intro {
+            font-size: 1.2rem;
+            color: #b8b8b8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Members Grid */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .member-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(65, 105, 225, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(65, 105, 225, 0.3);
+        }
+
+        .member-card:hover::before {
+            opacity: 1;
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            object-fit: cover;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .member-card:hover .member-photo {
+            border-color: #4169E1;
+            transform: scale(1.05);
+        }
+
+        .member-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ffffff;
+        }
+
+        .member-role {
+            font-size: 0.9rem;
+            color: #4169E1;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .member-bio {
+            color: #b8b8b8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+        }
+
+        .member-traits {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .trait-tag {
+            background: rgba(65, 105, 225, 0.2);
+            color: #4169E1;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .member-emoji {
+            font-size: 1.5rem;
+            margin-top: 10px;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px 30px;
+            margin-top: 60px;
+        }
+
+        .cta-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+
+        .cta-text {
+            color: #b8b8b8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #4169E1 0%, #6B73FF 100%);
+            color: #ffffff;
+            padding: 15px 35px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(65, 105, 225, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(65, 105, 225, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 40px 20px;
+            }
+
+            .page-title {
+                font-size: 2.5rem;
+            }
+
+            .members-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .member-card {
+                padding: 25px;
+            }
+
+            .cta-section {
+                padding: 40px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .page-intro {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <nav class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">⚙</div>
+                <span>Nextgen Rotaract</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="initiatives.html">Initiatives</a></li>
+                <li><a href="media.html">Media</a></li>
+                <li><a href="members.html" class="active">Members</a></li>
+                
+                <li><a href="contact.html">Contact Us</a></li>
+            </ul>
+            <a href="login.html" class="login-btn">Login / Register</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1 class="page-title">Meet Our Incredible Rotaractors</h1>
+            <p class="page-intro">
+                Get to know the dedicated individuals who make our club vibrant and drive positive change in the community. Each member brings unique talents, passion, and commitment to our shared mission of service and leadership.
+            </p>
+        </section>
+
+        <!-- Members Grid -->
+        <section class="members-grid">
+            <!-- Member 1: Dhruvi Jataniya -->
+            <div class="member-card">
+                <img src="images/members/dhruvi-jataniya.jpg" alt="Rtr. Dhruvi Jataniya" class="member-photo">
+                <h3 class="member-name">Rtr. Dhruvi Jataniya</h3>
+                <p class="member-role">Graphic Designer</p>
+                <p class="member-bio">
+                    A creative powerhouse who brings visual magic to all our events and campaigns. Dhruvi's innovative designs have transformed how we communicate our mission to the community.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Efficient</span>
+                    <span class="trait-tag">Creative Thinking</span>
+                    <span class="trait-tag">Adaptability</span>
+                </div>
+                <div class="member-emoji">🎨</div>
+            </div>
+
+            <!-- Member 2: Krushnapal Singh -->
+            <div class="member-card">
+                <img src="images/members/krushnapal-singh.jpg" alt="Rtr. Krushnapal Singh" class="member-photo">
+                <h3 class="member-name">Rtr. Krushnapal Singh</h3>
+                <p class="member-role">New Generation Director</p>
+                <p class="member-bio">
+                    A natural leader who excels at building bridges between different communities. His networking prowess and collaborative spirit make him an invaluable team player.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Networking Skills</span>
+                    <span class="trait-tag">Communicator</span>
+                    <span class="trait-tag">Collaborative</span>
+                </div>
+                <div class="member-emoji">🤝</div>
+            </div>
+
+            <!-- Member 3: Tehzib Kamani -->
+            <div class="member-card">
+                <img src="images/members/tehzib-kamani.jpg" alt="Rtr. Tehzib Kamani" class="member-photo">
+                <h3 class="member-name">Rtr. Tehzib Kamani</h3>
+                <p class="member-role">Club Service Director</p>
+                <p class="member-bio">
+                    A dynamic leader who brings energy and enthusiasm to every project. His engaging personality and natural leadership abilities inspire everyone around him.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Dynamic</span>
+                    <span class="trait-tag">Engaging</span>
+                    <span class="trait-tag">Leader</span>
+                </div>
+                <div class="member-emoji">⚡</div>
+            </div>
+
+            <!-- Member 4: Heer Parikh -->
+            <div class="member-card">
+                <img src="images/members/heer-parikh.jpg" alt="Rtr. Heer Parikh" class="member-photo">
+                <h3 class="member-name">Rtr. Heer Parikh</h3>
+                <p class="member-role">Assoc. Professional Service Director</p>
+                <p class="member-bio">
+                    A meticulous planner with exceptional organizational skills. Heer's attention to detail ensures every event runs smoothly and professionally.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Resourceful</span>
+                    <span class="trait-tag">Detail-Oriented</span>
+                    <span class="trait-tag">Organized</span>
+                </div>
+                <div class="member-emoji">📋</div>
+            </div>
+
+            <!-- Member 5: Dhruv Soni -->
+            <div class="member-card">
+                <img src="images/members/dhruv-soni.jpg" alt="Rtr. Dhruv Soni" class="member-photo">
+                <h3 class="member-name">Rtr. Dhruv Soni</h3>
+                <p class="member-role">Secretary</p>
+                <p class="member-bio">
+                    The backbone of our club's administrative operations. His organized approach and reliable communication keep all our activities running like clockwork.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Organized</span>
+                    <span class="trait-tag">Communicator</span>
+                    <span class="trait-tag">Reliable</span>
+                </div>
+                <div class="member-emoji">📝</div>
+            </div>
+
+            <!-- Member 6: Hireni Thakkar -->
+            <div class="member-card">
+                <img src="images/members/hireni-thakkar.jpg" alt="Rtr. Hireni Thakkar" class="member-photo">
+                <h3 class="member-name">Rtr. Hireni Thakkar</h3>
+                <p class="member-role">Vice President</p>
+                <p class="member-bio">
+                    A strategic thinker and motivational leader who guides our club toward achieving its vision. Her leadership inspires excellence in every member.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Strategic</span>
+                    <span class="trait-tag">Leader</span>
+                    <span class="trait-tag">Motivator</span>
+                </div>
+                <div class="member-emoji">🎯</div>
+            </div>
+
+            <!-- Member 7: Dhruvi Shah -->
+            <div class="member-card">
+                <img src="images/members/dhruvi-shah.jpg" alt="Rtr. Dhruvi Shah" class="member-photo">
+                <h3 class="member-name">Rtr. Dhruvi Shah</h3>
+                <p class="member-role">Sergeant-at-Arms</p>
+                <p class="member-bio">
+                    A disciplined coordinator who ensures our meetings and events maintain the highest standards. Her observant nature keeps everything on track.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Disciplined</span>
+                    <span class="trait-tag">Coordinator</span>
+                    <span class="trait-tag">Observant</span>
+                </div>
+                <div class="member-emoji">🛡️</div>
+            </div>
+
+            <!-- Member 8: Ridham Kothari -->
+            <div class="member-card">
+                <img src="images/members/ridham-kothari.jpg" alt="Rtr. Ridham Kothari" class="member-photo">
+                <h3 class="member-name">Rtr. Ridham Kothari</h3>
+                <p class="member-role">Assoc. Community Service Director</p>
+                <p class="member-bio">
+                    A compassionate organizer who spearheads our community outreach programs. His supportive nature and organizational skills create meaningful impact.
+                </p>
+                <div class="member-traits">
+                    <span class="trait-tag">Supportive</span>
+                    <span class="trait-tag">Compassionate</span>
+                    <span class="trait-tag">Organizer</span>
+                </div>
+                <div class="member-emoji">🤲</div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h2 class="cta-title">Ready to Join Our Family?</h2>
+            <p class="cta-text">
+                Become part of a community that's making a real difference. Connect with like-minded individuals and help us build a better tomorrow.
+            </p>
+            <a href="signup.html" class="cta-button">Join Us Today</a>
+        </section>
+    </main>
+    <script src="js/utils.js"></script>
+    <script src="js/modals.js"></script>
+</body>
+</html>
